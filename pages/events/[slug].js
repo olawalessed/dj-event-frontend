@@ -3,11 +3,13 @@ import Link from "next/link";
 import styles from "@/styles/Event.module.css";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import Image from "next/image";
+//import { API_URL } from "@/config/";
 
-const API_URL_PATH = "http://localhost:3000/api/events";
+
+const API_URL_PATH = "http://localhost:3001";
 
 export async function getStaticPaths() {
-  const res = await fetch(`${API_URL_PATH}`);
+  const res = await fetch(`${API_URL_PATH}/events`);
   const events = await res.json();
 
   const paths = events.map((evt) => ({
@@ -24,9 +26,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params: { slug } }) {
   //console.log(slug)
-  const res = await fetch(`${API_URL_PATH}/${slug}`);
+  const res = await fetch(`${API_URL_PATH}/events?slug=${slug}`);
   const event = await res.json();
-  //console.log(event)
+  console.log(event)
   return {
     props: {
       evt: event[0],
@@ -35,7 +37,7 @@ export async function getStaticProps({ params: { slug } }) {
 }
 
 export default function SingleEventPage({ evt }) {
-  console.log(evt);
+  //console.log(evt);
 
   const deleteEvent = (e) => {
     console.log("delete");
@@ -64,7 +66,7 @@ export default function SingleEventPage({ evt }) {
 
         {evt.image && (
           <div className={styles.image}>
-            <Image src={evt.image} width={960} height={600} />
+            <Image src={evt.image.formats.thumbnail.url} width={960} height={600} />
           </div>
         )}
 
