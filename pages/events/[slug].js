@@ -60,7 +60,7 @@ export default function SingleEventPage({ evt }) {
         </div>
 
         <span>
-          {evt.date} at {evt.time}
+          {new Date(evt.date).toLocaleDateString('en-US')} at {evt.time}
         </span>
         <h1>{evt.name}</h1>
 

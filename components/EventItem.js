@@ -9,7 +9,7 @@ const EventItem = ({evt}) => {
                 <Image rounded="true" src={evt.image ? evt.image.formats.thumbnail.url : '/images/event-default.png'} width={170} height={100} />
             </div>
             <div className={styles.info}>
-                <span>{evt.date} at {evt.time}</span>
+                <span>{new Date(evt.date).toLocaleDateString('en-US')} at {evt.time}</span>
                 <h3>{evt.name}</h3>
                 
                 <div className={styles.link}>
