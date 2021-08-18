@@ -3,7 +3,9 @@ import Link from "next/link";
 import styles from "@/styles/Event.module.css";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import Image from "next/image";
-//import { API_URL } from "@/config/";
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { useRouter } from "next/router";
 
 
 const API_URL_PATH = "http://localhost:3001";
@@ -39,12 +41,29 @@ export async function getStaticProps({ params: { slug } }) {
 export default function SingleEventPage({ evt }) {
   //console.log(evt);
 
-  const deleteEvent = (e) => {
-    console.log("delete");
+  const router = useRouter()
+
+  const deleteEvent = async (e) => {
+    
+    if(confirm('Are you sure')) {
+      const res =  await fetch(`${API_URL_PATH}/events/${evt.id}`, {
+        method: "DELETE"
+      }
+    )
+    
+    const data = await res.json()
+
+      if (!res.ok) {
+        toast.error(data.message)
+      } else {
+        router.push('/events')
+      }
+    }
   };
 
   return (
     <Layout>
+      <ToastContainer />
       <div className={styles.event}>
         <div className={styles.controls}>
           <Link href={`/events/edit/${evt.id}`}>

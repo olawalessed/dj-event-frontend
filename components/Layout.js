@@ -16,6 +16,8 @@ const Layout = ({children, title, keyword, description}) => {
                 <title>{title}</title>
                 <meta name='description' content={description} />
                 <meta name='keywords' content={keyword} />
+                <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css' />
+
             </Head>
 
             <Header />
