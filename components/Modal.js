@@ -1,37 +1,30 @@
 import React, {useState} from 'react'
 import { Button, Image, Modal, Header, Icon } from 'semantic-ui-react'
 import Layout from '@/components/Layout'
+import ImageUpload from './ImageUpload'
+import { API_URL } from '../config'
 
-export default function TestModal({show}) {
-  const [open, setOpen] = useState(show)
+
+
+
+
+export default function TestModal({imageUploaded, show, setShow, evtId}) {
 
   return (
     <div>
-       
-
         <Modal
+        size="tiny"
       closeIcon
-      open={open}
+      open={show}
       trigger={<Button secondary>
           Set Image</Button>}
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+      onClose={() => setShow(show)}
+      onOpen={() => setShow(!show)}
     >
-      <Header icon='archive' content='Archive Old Messages' />
+      <Header icon='image' content='Upload Event Image' />
       <Modal.Content>
-        <p>
-          Your inbox is getting full, would you like us to enable automatic
-          archiving of old messages?
-        </p>
+          <ImageUpload evtId={evtId} imageUploaded={imageUploaded}/>
       </Modal.Content>
-      <Modal.Actions>
-        <Button color='red' onClick={() => setOpen(false)}>
-          <Icon name='remove' /> No
-        </Button>
-        <Button color='green' onClick={() => setOpen(false)}>
-          <Icon name='checkmark' /> Yes
-        </Button>
-      </Modal.Actions>
     </Modal>
     </div>
   )

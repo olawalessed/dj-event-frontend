@@ -9,7 +9,7 @@ function TestModal() {
     <Layout>
         <Modal
       closeIcon
-      open={open}
+      //open={open}
       trigger={<Button>Show Modal</Button>}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}

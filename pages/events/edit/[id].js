@@ -9,11 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import { FaImage } from "react-icons/fa";
-import ModalItem from "@/components/Modal";
-import { Button, Icon } from "semantic-ui-react";
-
-
-
+//import ModalItem from "@/components/Modal";
+import { Button, Icon, Modal, Header } from "semantic-ui-react";
 
 //Getting information from the server. SSR
 export async function getServerSideProps({ params: { id } }) {
@@ -29,6 +26,8 @@ export async function getServerSideProps({ params: { id } }) {
 //passing the prop to the Component
 
 export default function EditEventPage({ evt }) {
+  //States
+
   const [values, setValues] = useState({
     name: evt.name,
     performers: evt.performers,
@@ -43,9 +42,16 @@ export default function EditEventPage({ evt }) {
     evt.image ? evt.image.formats.thumbnail.url : null
   );
 
+  //Open modal
   const [showModal, setShowModal] = useState(false);
 
   const router = useRouter();
+
+  //Set image file from form to formdata
+  const [image, setImage] = useState(null);
+
+  
+  //Actions
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,6 +84,47 @@ export default function EditEventPage({ evt }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
+  };
+
+//Image actions 
+  const handleFileChange = (e) => {
+    console.log(e.target.files[0])
+    setImage(e.target.files[0])
+  };
+
+  const imageUploaded = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("files", image);
+    formData.append("ref", "events");
+    formData.append("refID", evt.id);
+    formData.append("field", "image");
+
+    console.log(formData)
+
+    const res = await fetch(`${API_URL}/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+
+    if (res.ok) {
+      try {
+        console.log("Image uploaded...");
+        toast.info('Image Uploaded')
+        const res = await fetch(`${API_URL}/events/${evt.id}`);
+        const data = await res.json();
+        console.log('image data is: ', data)
+        setImagePreview(data.image.formats.thumbnail.url);
+
+        setShowModal(false);
+        router.asPath;
+        console.log("Image added successfully");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -180,7 +227,7 @@ export default function EditEventPage({ evt }) {
       <div>
         <h2>Event Image</h2>
         {evt.image ? (
-          <Image rounded src={imagePreview} height={200} width={350} />
+          <Image src={imagePreview} height={200} width={350} />
         ) : (
           <div>
             <p>No image uploaded</p>
@@ -188,8 +235,121 @@ export default function EditEventPage({ evt }) {
         )}
       </div>
       <div>
-        <ModalItem show={showModal} />
+        {/* Modal here */}
+
+        <div>
+          <Modal
+            size="tiny"
+            closeIcon
+            open={showModal}
+            trigger={<Button secondary>Set Image</Button>}
+            onClose={() => setShowModal(false)}
+            onOpen={() => setShowModal(true)}
+          >
+            <Header icon="image" content="Upload Event Image" />
+            <Modal.Content>
+              {/* Image Uploader Component */}
+              <div className={styles.form}>
+                <p>
+                  <em>
+                    <code>Select image from local folder</code>
+                  </em>
+                </p>
+                <form onSubmit={imageUploaded}>
+                  <div className={styles.file}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+
+                    <Button
+                      fluid
+                      positive
+                      type="submit"
+                      className={styles.file}
+                      primary
+                    >
+                      Upload Image
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </Modal.Content>
+          </Modal>
+        </div>
       </div>
     </Layout>
   );
 }
+
+//Modal Component
+/*
+export const Modal = ({ imageUploaded, show, setShow, evtId }) => {
+
+  return (
+    <div>
+        <Modal
+        size="tiny"
+      closeIcon
+      open={show}
+      trigger={<Button secondary>
+          Set Image</Button>}
+      onClose={() => setShow(false)}
+      onOpen={() => setShow(true)}
+    >
+      <Header icon='image' content='Upload Event Image' />
+      <Modal.Content>
+          <ImageUpload evtId={evtId} imageUploaded={imageUploaded}/>
+      </Modal.Content>
+    </Modal>
+    </div>
+  )
+}
+
+*/
+
+//ImageUpload Component
+/*export const ImageUpload = ({ImageUploaded, evtId}) => {
+
+  const [image, setImage] = useState(null)
+
+  const handleSubmit = async (e) => {
+      e.preventDefault()
+
+      const formData = new FormData()
+      formData.append('files', image)
+      formData.append('ref', 'events')
+      formData.append('refID', evtId)
+      formData.append('field', 'image')
+
+      const res = await fetch(`${API_URL}/upload`, {
+          method: 'POST',
+          body: formData
+      })
+
+      if (res.ok) {
+          ImageUploaded
+      }
+  }
+
+  const handleFileChange = (e) => {
+      //console.log(e.target.files[0])
+      setImage(e.target.files[0])
+  }
+  
+  return (
+      <div className={styles.form}>
+          <p><em><code>Select image from local folder</code></em></p>
+          <form onSubmit={handleSubmit}>
+              <div className={styles.file}>
+                  <input type="file" accept="image/*" onChange={handleFileChange} />
+                  
+                  <Button fluid positive type="submit" className={styles.file} primary>Upload Image</Button>
+              </div>
+          </form>
+      </div>
+  )
+}
+
+*/

@@ -26,6 +26,10 @@
     list-style: none;
 }
 
+.icon {
+    padding: 0 10px;
+}
+
 .logo {
     color: red;
     font-size: 20px;

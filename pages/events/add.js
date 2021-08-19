@@ -43,7 +43,7 @@ export default function AddEvent() {
             toast.error('Something went wrong')
         } else {
             const evt = await res.json()
-            toast.success('Item deleted succesfully')
+            toast.success('Item Added succesfully')
             router.push(`/events`)
         }
     }
