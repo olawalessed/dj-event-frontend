@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "moment": "^2.29.1",
     "next": "11.0.1",
     "qs": "^6.10.1",
