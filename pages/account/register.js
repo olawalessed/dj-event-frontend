@@ -1,17 +1,20 @@
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useState, useEffect, useContext } from "react";
-import Layout from "@/components/Layout";
-import styles from "@/styles/AuthForm.module.css";
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { useState, useEffect, useContext } from "react"
+import Layout from "@/components/Layout"
+import styles from "@/styles/AuthForm.module.css"
 import { Container, Grid, Card, Form } from "semantic-ui-react";
-import { FaUser } from "react-icons/fa";
-import Link from "next/link";
+import { FaUser } from "react-icons/fa"
+import Link from "next/link"
+import AuthContext from "@/context/AuthContext"
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [passwordConfirm, setPasswordConfirm] = useState("")
+  const [passwordConfirm, setPasswordConfirm] = useState("")
+  
+  const {register, error} = useContext(AuthContext)
 
   const handleSubmit = (e) => {
       e.preventDefault();
@@ -20,7 +23,7 @@ export default function RegisterPage() {
           toast.error('Password do not match')
       }
 
-    console.log(username, email, password)
+    register({username, email, password})
   }
 
   return (
@@ -64,11 +67,11 @@ export default function RegisterPage() {
           </label>
           <input
             type="password"
-            id="password"
+            id="passwordConfirm"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
           />
-          <input className="btn" type="submit" value="Login" />
+          <input className="btn" type="submit" value="Create Account" />
         </form>
         <div className={styles.div}>
           <p>

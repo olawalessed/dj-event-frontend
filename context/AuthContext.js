@@ -7,19 +7,19 @@ const AuthContext = createContext()
 
 //Create context provider for all children component
 export const AuthProvider = ({children}) => {
-  const [user, setUser] = useState({name: 'brad'});
+  const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
   //We'll have some methods
     
     //Register user
-    const register = async ({ user }) => {
+    const register = async (user) => {
         console.log(user)
     }
 
     //Login User
-    const login = async ({ email: identifier, password }) => {
-        console.log(identifier, password)
+    const login = async ({ email:identifier, password }) => {
+        console.log({identifier, password})
     }
  
     //Logout user
