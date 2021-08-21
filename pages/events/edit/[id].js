@@ -147,6 +147,10 @@ export default function EditEventPage({ evt }) {
       <ModalContainer
         showModal={showModal}
         evtId={evt.id}
+        handleUpload={handleUpload}
+        handleFileChange={handleFileChange}
+        showModal={showModal}
+        setShowModal={setShowModal}
       />
     </Layout>
   );
