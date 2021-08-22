@@ -31,7 +31,7 @@ export default function LoginPage() {
           <FaUser /> Log In
         </h1>
         <ToastContainer />
-
+        
         <form onSubmit={handleSubmit}>
           <label className={styles.label} htmlFor="email">
             Email Address

@@ -15,16 +15,6 @@ import axios from "axios";
 import EditForm from "@/components/EditForm";
 import ModalContainer from "@/components/ModalContainer";
 
-//Getting information from the server. SSR
-export async function getServerSideProps({ params: { id } }) {
-  const res = await fetch(`${API_URL}/events/${id}`);
-
-  const evt = await res.json();
-  //console.log(evt);
-  return {
-    props: { evt },
-  };
-}
 
 //passing the prop to the Component
 
@@ -158,3 +148,13 @@ export default function EditEventPage({ evt }) {
 
 
 
+//Getting information from the server. SSR
+export async function getServerSideProps({ req, params: { id } }) {
+  const res = await fetch(`${API_URL}/events/${id}`);
+
+  const evt = await res.json();
+  console.log(req.headers.cookie);
+  return {
+    props: { evt },
+  };
+}
