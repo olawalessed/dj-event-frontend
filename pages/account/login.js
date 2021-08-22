@@ -13,7 +13,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   //Pull out info from the AuthContext for the login page
-  const {login, error} = useContext(AuthContext)
+  const { login, error } = useContext(AuthContext)
+  
+  useEffect(() => {
+    error && toast.error(error)
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault();
