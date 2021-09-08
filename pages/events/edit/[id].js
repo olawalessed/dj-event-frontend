@@ -14,11 +14,12 @@ import { Button, Icon, Modal, Header } from "semantic-ui-react";
 import axios from "axios";
 import EditForm from "@/components/EditForm";
 import ModalContainer from "@/components/ModalContainer";
+import { parseCookies } from "@/helpers/index";
 
 
 //passing the prop to the Component
 
-export default function EditEventPage({ evt }) {
+export default function EditEventPage({ evt, token }) {
   //States
 
   const [values, setValues] = useState({
@@ -60,15 +61,21 @@ export default function EditEventPage({ evt }) {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(values),
     });
+    
+    const evt = await res.json();
 
     if (!res.ok) {
+      if (res.status === 403 || res.status === 401) {
+        toast.error("Unathorized")
+        return
+      }
       toast.error("Something went wrong");
     } else {
-      const evt = await res.json();
-      toast.success("Item deleted succesfully");
+      toast.success("Event updated succesfully");
       router.push(`/events`);
     }
   };
@@ -120,7 +127,7 @@ export default function EditEventPage({ evt }) {
   };
 
    
-  const imageSize = evt.image.formats.thumbnail
+  const imageSize = evt.image ? evt.image.formats.thumbnail : null
   
   
   
@@ -149,12 +156,15 @@ export default function EditEventPage({ evt }) {
 
 
 //Getting information from the server. SSR
-export async function getServerSideProps({ req, params: { id } }) {
+export async function getServerSideProps({ params: { id }, req }) {
+  
+  const { token } = parseCookies(req)
+
   const res = await fetch(`${API_URL}/events/${id}`);
 
   const evt = await res.json();
   console.log(req.headers.cookie);
   return {
-    props: { evt },
+    props: { evt, token },
   };
 }
