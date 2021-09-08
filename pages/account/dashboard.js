@@ -13,20 +13,20 @@ export default function DashboardPage({ events }) {
   
   const router = useRouter()
     
-  const deleteEvent = async (id) => {
-    // console.log('Delete iTem')
+  const deleteEvent = async (e) => {
+    if (confirm("Are you sure")) {
+      const res = await fetch(`${API_URL_PATH}/events/${evt.id}`, {
+        method: "DELETE",
+      });
 
-    // const res = await fetch(`${API_URL}/events/${evt.id}`)
+      const data = await res.json();
 
-    // const data = await res.json()
-    console.log(id)
-
-    // if (res.ok) {
-    //   toast.warning('Item Deleted Successfully')
-    //   router.asPath
-    // } else {
-    //   toast.error(data.message)
-    // }
+      if (!res.ok) {
+        toast.error(data.message);
+      } else {
+        router.push("/events");
+      }
+    }
   }
   
   return (

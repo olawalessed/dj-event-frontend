@@ -65,7 +65,7 @@ export default function SingleEventPage({ evt }) {
     <Layout>
       <ToastContainer />
       <div className={styles.event}>
-        <div className={styles.controls}>
+        {/* <div className={styles.controls}>
           <Link href={`/events/edit/${evt.id}`}>
             <a>
               <FaPencilAlt /> Edit Event
@@ -76,7 +76,7 @@ export default function SingleEventPage({ evt }) {
               <FaTimes /> Delete Event
             </a>
           </Link>
-        </div>
+        </div> */}
 
         <span>
           {new Date(evt.date).toLocaleDateString('en-US')} at {evt.time}
